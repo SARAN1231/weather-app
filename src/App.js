@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import 'weather-icons/css/weather-icons.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Weather from './app_comp/Weather';
+import { useState } from 'react';
+import axios from "axios";
+ 
+
 
 function App() {
-  return (
+  const [data,setdata] = useState({});
+  const [location,setlocation] = useState('');
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=afc6f5d1df1cbb1564ae527dfd4a26d9`;
+
+  const searchlocation = (e) => {
+    if(e.key === 'Enter'){
+      axios.get(url).then((Response) =>{
+        setdata(Response.data)
+        console.log(Response.data)
+
+      })
+      setlocation('')
+    }
+  }
+   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <Weather 
+    searchlocation = {searchlocation}
+    location={location}
+    setlocation={setlocation}
+    data={data}
+    setdata={setdata}
+  
+    />
     </div>
   );
 }
